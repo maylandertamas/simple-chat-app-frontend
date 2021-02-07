@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Message } from '../../interfaces/message';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'src/app/services/message/message.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { User } from 'src/app/interfaces/user';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +21,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   public newMessage: string;
 
-  constructor(private loginService: LoginService,
+  constructor(private activeRoute: ActivatedRoute,
+              private loginService: LoginService,
               private messageService: MessageService,
               private chatService: ChatService) {
     this.reset();
@@ -59,12 +61,22 @@ export class ChatComponent implements OnInit, OnDestroy {
    */
   private updateContent() {
     this.isLoading = true;
-    // Request message history
-    this.messageService.getMessageHistory()
-    .subscribe((res: Message[]) => {
-      this.isLoading = false;
-      this.messageHistory = res;
-      // If error
+    // Try fetch data with resolver
+    this.activeRoute.data.pipe(map(data => data.messages))
+    .subscribe((result: Message[]) => {
+      if (result) {
+        this.messageHistory = result;
+        this.isLoading = false;
+      // Resolver failed, try with service
+      } else {
+        // Request message history
+        this.messageService.getMessageHistory()
+        .subscribe((res: Message[]) => {
+          this.messageHistory = res;
+          this.isLoading = false;
+        });
+      }
+    // If error
     }, err => {
       this.isLoading = false;
       this.isError = true;

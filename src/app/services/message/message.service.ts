@@ -4,11 +4,12 @@ import { Observable, Subscription } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { Message } from 'src/app/interfaces/message';
 import { ResetService } from '../reset/reset.service';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MessageService implements OnDestroy {
+export class MessageService implements OnDestroy, Resolve<any> {
 
   private messageHistory: Message[];
   private resetServiceSubscription: Subscription;
@@ -18,6 +19,10 @@ export class MessageService implements OnDestroy {
     private resetService: ResetService) {
       this.resetMessageHistory();
       this.subscribeToEvents();
+  }
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.getMessageHistory();
   }
 
   /**
