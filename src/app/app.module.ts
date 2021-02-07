@@ -8,17 +8,24 @@ import { ChatService } from './services/chat/chat.service';
 import { LoginService } from './services/login/login.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from './http-interceptors/base-url-interceptor';
+import { MessageService } from './services/message/message.service';
+import { ChatComponent } from './components/chat/chat.component';
+import { ResetService } from './services/reset/reset.service';
+import { LogoutComponent } from './components/logout/logout.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ChatComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     // HTTP Interceptor to change base url on http requests
@@ -26,7 +33,9 @@ import { BaseUrlInterceptor } from './http-interceptors/base-url-interceptor';
     useClass: BaseUrlInterceptor,
     multi: true},
     LoginService,
-    ChatService
+    ChatService,
+    MessageService,
+    ResetService
   ],
   bootstrap: [AppComponent]
 })

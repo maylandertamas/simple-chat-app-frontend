@@ -3,7 +3,7 @@ import { User } from "./user";
 export interface Message {
     id?: number;
     text?: string;
-    userId?: Int16Array;
+    userId?: number;
     user?: User;
     createdAt?: Date;
 }
