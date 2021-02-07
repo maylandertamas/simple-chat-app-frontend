@@ -1,1 +1,6 @@
-<p>login works!</p>
+<div class="row">
+  <div class="col-sm-12">
+    <input id="name" type="text" required name="name" [(ngModel)]="userName">
+    <button class="btn btn-primary" type="button" (click)="loginUser()">Login</button>
+  </div>
+</div>
