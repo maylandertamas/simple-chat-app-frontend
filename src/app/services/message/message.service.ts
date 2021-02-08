@@ -9,7 +9,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 @Injectable({
   providedIn: 'root'
 })
-export class MessageService implements OnDestroy, Resolve<any> {
+export class MessageService implements OnDestroy {
 
   private messageHistory: Message[];
   private resetServiceSubscription: Subscription;
@@ -19,10 +19,6 @@ export class MessageService implements OnDestroy, Resolve<any> {
     private resetService: ResetService) {
       this.resetMessageHistory();
       this.subscribeToEvents();
-  }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.getMessageHistory();
   }
 
   /**
@@ -35,15 +31,20 @@ export class MessageService implements OnDestroy, Resolve<any> {
   /**
    * Get message history
    */
-  public getMessageHistory() : Observable<Message[]> {
+  public getMessageHistory(limit: number = 100, offset: number = null, useCache: boolean = false) : Observable<Message[]> {
     // return messages from cache if possible
-    if (this.messageHistory && this.messageHistory.length > 0) {
+    if (useCache && this.messageHistory && this.messageHistory.length > 0) {
       return new Observable<Message[]>(observer => {
         observer.next(this.messageHistory);
       }).pipe(first());
     }
+
+    // Add url parameters
+    var url = 'api/messages?limit=' + limit;
+    url = offset ? url + '&offset=' + offset : url;
+
     // request messages from server
-    return this.http.get('api/messages').pipe(
+    return this.http.get(url).pipe(
       map((res: Message[]) => {
         this.messageHistory = res;
         return res

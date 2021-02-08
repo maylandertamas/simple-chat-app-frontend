@@ -12,6 +12,7 @@ import { MessageService } from './services/message/message.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { ResetService } from './services/reset/reset.service';
 import { LogoutComponent } from './components/logout/logout.component';
+import { MessageResolver } from './resolvers/message.resolver';
 
 
 @NgModule({
@@ -32,10 +33,13 @@ import { LogoutComponent } from './components/logout/logout.component';
     {provide: HTTP_INTERCEPTORS,
     useClass: BaseUrlInterceptor,
     multi: true},
+    // Services
     LoginService,
     ChatService,
     MessageService,
-    ResetService
+    ResetService,
+    // Resolvers
+    MessageResolver
   ],
   bootstrap: [AppComponent]
 })
