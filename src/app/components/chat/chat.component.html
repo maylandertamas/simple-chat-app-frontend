@@ -1,26 +1,23 @@
-<div class="container h-100">
-    <div class="row h-100 justify-content-center align-items-center">
-        <div class="row">
-            <ul>
-                <li *ngFor="let message of messageHistory">
-                        {{message?.text}}
-                </li>
-            </ul>
+<div class="container">
+    <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+    <!-- 
+    <div class="row">
+        <div class="viewport-container-header">
+            <span class="h2 primary-color viewport-container-header-text">Hey {{currentUser.username}} welcome in THE chat room!</span>
         </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <input id="message" type="text" required name="message" [(ngModel)]="newMessage">
-                <button class="btn btn-primary" type="button" (click)="sendMessage()">Send</button>
-            </div>
-            <div class="col-sm-2" *ngIf="isLoading">
-                :::LOADING:::
-            </div>
-            <div class="col-sm-3" *ngIf="isError">
-                ---ERROR---- {{error}}
-            </div>
+        <cdk-virtual-scroll-viewport itemSize="20" class="virtual-scroll-viewport container-border">
+            <div *cdkVirtualFor="let item of messageHistory" class="message-item">{{item.text}}</div>
+        </cdk-virtual-scroll-viewport>
+    </div>-->
+    <div class="center-container">
+        <div class="text-left">
+            <span class="h2 primary-color viewport-container-header-text text-left">Hey {{currentUser.username}}!</span>
         </div>
-        <div class="row">
-            <app-logout></app-logout>
+        <cdk-virtual-scroll-viewport itemSize="20" class="virtual-scroll-viewport container-border">
+            <div *cdkVirtualFor="let item of messageHistory" class="message-item">{{item.text}}</div>
+        </cdk-virtual-scroll-viewport>
+        <div>
+            
         </div>
     </div>
 </div>

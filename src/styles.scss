@@ -39,17 +39,17 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
-.login-form {
+.center-container  {
   min-width: 500px;
   position: absolute;
   text-align: center;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 @media (max-width: 500px) {
-  .login-form {
+  .center-container  {
     min-width: 90%;
   }
 }
@@ -59,11 +59,37 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-right: 0 !important;
 }
 
-.login-header-color {
+.primary-color {
   color: mat-color($sn-frontend-app-primary);
 }
 
 .login-header-tooltip {
   font-size: 1.0em;
   background-color: mat-color($sn-frontend-app-primary);
+}
+
+.container-border {
+  border: 3px solid lightgray;
+  border-radius: 10px;
+}
+
+
+/** Scrollbar styling
+  Won't work in IE and Firefox
+*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: mat-color($sn-frontend-app-primary); 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: mat-color($sn-frontend-app-primary); 
 }

@@ -43,18 +43,22 @@ export class LoginComponent implements OnInit {
   public loginUser() {
     if (!this.userName.value) { return null; }
     this.isLoading = true;
-    // Send login request
-    this.loginService.login(this.userName.value)
-    .subscribe((result: User) => {
-      this.isLoading = false;
-      this.router.navigate(['/chat']);
-    // If error occurs
-    }, err => {
-      this.isLoading = false;
-      this.isError = true;
-      this.error = err;
-      console.log(err);
-    });
+    // Set timeout only for displaying loading screen
+    // TODO: REMOVE
+    setTimeout(() => { 
+      // Send login request
+      this.loginService.login(this.userName.value)
+      .subscribe((result: User) => {
+        this.isLoading = false;
+        this.router.navigate(['/chat']);
+      // If error occurs
+      }, err => {
+        this.isLoading = false;
+        this.isError = true;
+        this.error = err;
+        console.log(err);
+      });
+  }, 0)
   }
 
   /**

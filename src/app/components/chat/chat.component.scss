@@ -1,0 +1,18 @@
+.virtual-scroll-viewport {
+    min-width: 800px;
+    min-height: 700px;
+  }
+  .viewport-container-header-text {
+    font-style: italic;
+    font-weight: bold;
+  }
+  
+  .message-item {
+    height: 50px;
+  }
+
+  @media (max-width: 500px) {
+    .virtual-scroll-viewport  {
+      min-width: 90%;
+    }
+  }
