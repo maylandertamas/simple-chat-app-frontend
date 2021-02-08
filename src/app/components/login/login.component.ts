@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { User } from '../../interfaces/user';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +11,9 @@ import { User } from '../../interfaces/user';
 })
 export class LoginComponent implements OnInit {
 
-  public userName: string;
-  public error: boolean;
+  public userName = new FormControl('', [Validators.required]);
+  public isError: boolean;
+  public error: any;
   public isLoading: boolean;
 
   constructor(
@@ -32,7 +34,6 @@ export class LoginComponent implements OnInit {
    */
   private reset() {
     this.isLoading = false;
-    this.userName = null;
     this.error = false;
   }
 
@@ -40,18 +41,18 @@ export class LoginComponent implements OnInit {
    * Login user with username
    */
   public loginUser() {
-    if (!this.userName) { return null; }
+    if (!this.userName.value) { return null; }
     this.isLoading = true;
-
     // Send login request
-    this.loginService.login(this.userName)
+    this.loginService.login(this.userName.value)
     .subscribe((result: User) => {
       this.isLoading = false;
       this.router.navigate(['/chat']);
     // If error occurs
     }, err => {
       this.isLoading = false;
-      this.error = true;
+      this.isError = true;
+      this.error = err;
       console.log(err);
     });
   }
@@ -68,8 +69,13 @@ export class LoginComponent implements OnInit {
       if (result) {
         this.router.navigate(['/chat']);
       }
+    // On error
+    }, err => {
+      this.isLoading = false;
+      this.isError = true;
+      this.error = err;
+      console.log(err);
     });
   
   }
-
 }

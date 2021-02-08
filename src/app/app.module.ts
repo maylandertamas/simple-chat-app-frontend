@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -13,6 +13,15 @@ import { ChatComponent } from './components/chat/chat.component';
 import { ResetService } from './services/reset/reset.service';
 import { LogoutComponent } from './components/logout/logout.component';
 import { MessageResolver } from './resolvers/message.resolver';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+
+
 
 
 @NgModule({
@@ -20,13 +29,22 @@ import { MessageResolver } from './resolvers/message.resolver';
     AppComponent,
     LoginComponent,
     ChatComponent,
-    LogoutComponent
+    LogoutComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    // Material
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     // HTTP Interceptor to change base url on http requests
