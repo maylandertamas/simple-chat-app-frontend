@@ -30,6 +30,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport: CdkVirtualScrollViewport;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
+  /**
+   Pop up confirmation dialog on leave page attempt 
+   */
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     if (this.newMessage.value && !this.isStringEmpty(this.newMessage.value)) {
