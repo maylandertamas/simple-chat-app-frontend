@@ -19,8 +19,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 
@@ -46,7 +47,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatInputModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    ScrollingModule
+    ScrollingModule,
+    MatIconModule
   ],
   providers: [
     // HTTP Interceptor to change base url on http requests

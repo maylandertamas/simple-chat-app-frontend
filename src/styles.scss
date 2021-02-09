@@ -41,6 +41,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .center-container  {
   min-width: 500px;
+  max-width: 800px;
   position: absolute;
   text-align: center;
   top: 45%;
@@ -48,7 +49,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   transform: translate(-50%, -50%);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 576px) {
   .center-container  {
     min-width: 90%;
   }

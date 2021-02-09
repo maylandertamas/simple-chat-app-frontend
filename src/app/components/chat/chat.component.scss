@@ -1,18 +1,51 @@
+
 .virtual-scroll-viewport {
-    min-width: 800px;
+    min-width: 700px;
     min-height: 700px;
   }
-  .viewport-container-header-text {
-    font-style: italic;
-    font-weight: bold;
-  }
-  
-  .message-item {
-    height: 50px;
+.header-text {
+  font-style: italic;
+  font-weight: bold;
+  text-overflow: ellipsis;
+}
+
+.header-container {
+  max-width: 600px;
+  min-width: 100px;
+}
+
+.message-item {
+  height: 50px;
+}
+
+@media (max-width: 576px) {
+  .virtual-scroll-viewport  {
+    min-width: 90%;
   }
 
-  @media (max-width: 500px) {
-    .virtual-scroll-viewport  {
-      min-width: 90%;
-    }
+  .center-container  {
+    max-height: 85%;
   }
+
+  .chat-form-field {
+    min-width: 10%;
+  }
+
+  .header-container {
+    max-width: 50%;
+  }
+}
+
+.chat-form-field {
+  max-width: 800px;
+  width: 100%;
+}
+
+textarea.mat-input-element {
+    padding: 0;
+    margin: 0;
+}
+
+.mat-form-field {
+    line-height: normal;
+}

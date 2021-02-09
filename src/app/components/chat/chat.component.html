@@ -1,23 +1,34 @@
 <div class="container">
     <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
-    <!-- 
-    <div class="row">
-        <div class="viewport-container-header">
-            <span class="h2 primary-color viewport-container-header-text">Hey {{currentUser.username}} welcome in THE chat room!</span>
-        </div>
-        <cdk-virtual-scroll-viewport itemSize="20" class="virtual-scroll-viewport container-border">
-            <div *cdkVirtualFor="let item of messageHistory" class="message-item">{{item.text}}</div>
-        </cdk-virtual-scroll-viewport>
-    </div>-->
     <div class="center-container">
-        <div class="text-left">
-            <span class="h2 primary-color viewport-container-header-text text-left">Hey {{currentUser.username}}!</span>
-        </div>
-        <cdk-virtual-scroll-viewport itemSize="20" class="virtual-scroll-viewport container-border">
-            <div *cdkVirtualFor="let item of messageHistory" class="message-item">{{item.text}}</div>
+        <!-- HEADER -->
+        <span class="h2 primary-color viewport-container-header-text float-left">Hey {{currentUser.username}}!</span>
+        <app-logout class="float-right"></app-logout>
+        <!-- SCROLL BOX -->
+        <cdk-virtual-scroll-viewport itemSize="scollItemSize" class="virtual-scroll-viewport container-border">
+            <div *cdkVirtualFor="let item of messageHistory" class="message-item text-left">{{item.text}}</div>
         </cdk-virtual-scroll-viewport>
-        <div>
-            
+        <!-- ERROR -->
+        <div *ngIf="error && isError " class="alert alert-danger mt-2" role="alert">
+            {{ error?.message ? error.message : 'An unknown error occured' }}
         </div>
+        <!-- CHAT INPUT -->
+        <form (ngSubmit)="sendMessage()" (keydown)="enterSubmit($event)">
+            <mat-form-field class="float-left chat-form-field" [floatLabel]="'never'">
+            <mat-label>Leave a chat message</mat-label>
+            <textarea
+            matInput
+            [formControl]="newMessage"
+            name="chat-message"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="3"></textarea>
+            <button [disabled]="isStringEmpty(newMessage.value)" type="submit" mat-icon-button matSuffix color="primary">
+                <mat-icon>send</mat-icon>
+            </button>
+            <mat-error *ngIf="newMessage.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </form>
     </div>
 </div>

@@ -11,7 +11,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  public userName = new FormControl('', [Validators.required]);
+  public userName = new FormControl('', [Validators.required, Validators.maxLength(32)]);
   public isError: boolean;
   public error: any;
   public isLoading: boolean;
@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
    * On component init
    */
   ngOnInit(): void {
-    this.isLoggedInOnInit();
   }
     
   /**
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit {
    * Login user with username
    */
   public loginUser() {
-    if (!this.userName.value) { return null; }
+    if (!this.userName.value || this.userName.errors) { return null; }
     this.isLoading = true;
     // Set timeout only for displaying loading screen
     // TODO: REMOVE
@@ -58,28 +57,18 @@ export class LoginComponent implements OnInit {
         this.error = err;
         console.log(err);
       });
-  }, 0)
+    }, 1500);
   }
 
   /**
-   * Check if user already logged in
-   */
-  private isLoggedInOnInit() {
-    this.isLoading = true;
-    this.loginService.isUserLoggedIn()
-    .subscribe((result: boolean) => {
-      this.isLoading = false;
-      // Redirect to chat if user already logged in
-      if (result) {
-        this.router.navigate(['/chat']);
-      }
-    // On error
-    }, err => {
-      this.isLoading = false;
-      this.isError = true;
-      this.error = err;
-      console.log(err);
-    });
-  
+   * Get error message if invalid username
+   *  */ 
+  public getErrorMessage() {
+    if (this.userName.errors.required) {
+      return 'Username is missing';
+    } else if(this.userName.errors.maxlength) {
+      return 'Username is too long';
+    } 
+    return 'Invalid username';
   }
 }

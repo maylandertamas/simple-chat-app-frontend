@@ -12,7 +12,7 @@ import { ResetService } from '../reset/reset.service';
 export class LoginService {
 
   private loggedInUser: User; 
-  private isLoggedIn: boolean;
+  public isLoggedIn: boolean;
 
   constructor(private resetService: ResetService,
               private http: HttpClient) {

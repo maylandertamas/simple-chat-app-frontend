@@ -1,12 +1,15 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, NgZone, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Message } from '../../interfaces/message';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'src/app/services/message/message.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { User } from 'src/app/interfaces/user';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { FormControl, Validators } from '@angular/forms';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-chat',
@@ -20,16 +23,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   public isError: boolean;
   public error: any;
   public currentUser: User;
+  public scollItemSize: number;
 
-  public newMessage: string;
+  public newMessage = new FormControl('', [Validators.maxLength(512)]);
 
   @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport: CdkVirtualScrollViewport;
-
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   constructor(private activeRoute: ActivatedRoute,
               private loginService: LoginService,
               private messageService: MessageService,
-              private chatService: ChatService) {
+              private chatService: ChatService,
+              private ngZone: NgZone) {
     this.reset();
   }
 
@@ -41,7 +46,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.addChatMessageListener();
     this.updateContent();
     this.subscribeToEvents();
-    this.loginService.getLoggedInUser().subscribe((res: User) =>
+    // Get current user on init
+    this.loginService.getLoggedInUser()
+    .subscribe((res: User) =>
     {
       this.currentUser = res;
     });
@@ -62,7 +69,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.isLoading = false;
     this.isError = false;
     this.error = null;
-    this.newMessage = '';
+    this.scollItemSize = 0;
   }
 
   /**
@@ -78,6 +85,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       .subscribe((result: Message[]) => {
         if (result) {
           this.messageHistory = result;
+          this.scollItemSize = this.messageHistory.length;
           // Scroll viewport to bottom
           this.scrollToBottom();
           this.isLoading = false;
@@ -97,14 +105,14 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.error = err;
         console.log(err);
       });
-    }, 0);
+    }, 2000);
   }
 
   /**
    * Create new message
    */
   public sendMessage() {
-    if (!this.newMessage) { return; }
+    if (this.isStringEmpty(this.newMessage.value) || this.newMessage.errors) { return null; }
     this.isLoading = true;
     // Get logged in user
     if (!this.currentUser) {
@@ -112,11 +120,12 @@ export class ChatComponent implements OnInit, OnDestroy {
       .subscribe((user: User) => {
         this.isLoading = false;
         // Create new message
-        let message: Message = { text: this.newMessage, userId: user.id }
+        let message: Message = { text: this.newMessage.value, userId: user.id }
         // Send new message
         this.messageService.createMessage(message)
         .subscribe(res => {
           this.isLoading = false;
+          this.newMessage.setValue('');
         });
       // If error happens
       }, err => {
@@ -124,18 +133,30 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.isError = true;
         this.error = err;
       });
+    // Curent user already loaded, so just send new message
     } else {
-      let message: Message = { text: this.newMessage, userId: this.currentUser.id }
+      let message: Message = { text: this.newMessage.value, userId: this.currentUser.id }
        // Send new message
        this.messageService.createMessage(message)
        .subscribe(res => {
          // Create new message
          this.isLoading = false;
+         this.newMessage.setValue('');
        }, err => {
         this.isLoading = false;
         this.isError = true;
         this.error = err;
       });
+    }
+  }
+
+  /**
+   * Submit text message on enter
+   * @param event
+   */
+  public enterSubmit(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.sendMessage();
     }
   }
 
@@ -146,8 +167,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     // Subscribe to new message events 
     this.chatService.onNewMessageReceived
     .subscribe((newMessageReceived: Message) => {
-      // Add new message to history
-      this.messageHistory.push(newMessageReceived);
+      // Add new message to history, and force change detection
+      this.messageHistory = [...this.messageHistory, newMessageReceived];
+      this.scrollToBottom();
     });
   }
 
@@ -170,4 +192,30 @@ export class ChatComponent implements OnInit, OnDestroy {
     }, 50);
   }
 
+  /**
+   * Helper function to resize text area for chat messages
+   */
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this.ngZone.onStable.pipe(take(1))
+        .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
+  /**
+   * Get error message if invalid chat message
+   */ 
+  public getErrorMessage() {
+    if(this.newMessage.errors.maxlength) {
+      return 'Chat message is too long';
+    } 
+    return 'Invalid chat message';
+  }
+
+  /**
+   * Check if string is empty /\r|\n/
+   * @param text
+   */
+  public isStringEmpty(text: string): boolean {
+    return text === null || text.length <= 0 || text.match(/^\s*$/) !== null;
+  };
 }

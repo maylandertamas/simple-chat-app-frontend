@@ -18,8 +18,8 @@
       <div class="col-sm-12">
         <mat-form-field appearance="fill" class="col-sm-12">
           <mat-label>Username</mat-label>
-          <input matInput type="text" name="username" id="username" placeholder="Just give me a user name.." [formControl]="userName" />
-          <mat-error *ngIf="userName.invalid">Well, looks like you forgot to add a username</mat-error>
+          <input matInput type="text" name="username" id="username" placeholder="Write here a username" [formControl]="userName" />
+          <mat-error *ngIf="userName.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
       <!-- ERROR -->
