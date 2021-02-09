@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, NgZone, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, NgZone } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Message } from '../../interfaces/message';
 import { ActivatedRoute } from '@angular/router';
@@ -9,7 +9,6 @@ import { User } from 'src/app/interfaces/user';
 import { map, take } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormControl, Validators } from '@angular/forms';
-import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-chat',
@@ -25,7 +24,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   public currentUser: User;
   public scollItemSize: number;
 
-  public newMessage = new FormControl('', [Validators.maxLength(512)]);
+  public newMessage = new FormControl('', [Validators.maxLength(1024)]);
 
   @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport: CdkVirtualScrollViewport;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
@@ -218,4 +217,29 @@ export class ChatComponent implements OnInit, OnDestroy {
   public isStringEmpty(text: string): boolean {
     return text === null || text.length <= 0 || text.match(/^\s*$/) !== null;
   };
+
+  /**
+   * Compare message dates if date label is required in chat
+   * @param actualMessageDate
+   * @param nextMessageDate 
+   */
+  public isDateLabelRequired(actualMessageDate: string, nextMessageDate: string) {
+    if (!actualMessageDate || !nextMessageDate) { return false; }
+
+    const actualMessageDateAsDate = new Date(actualMessageDate);
+    const nextMessageDateAsDate = new Date(nextMessageDate);
+    // If dates not equal
+    if (actualMessageDateAsDate.getDate() !== nextMessageDateAsDate.getDate()) {
+     return true;
+    }
+    // If hours not equal
+    if (actualMessageDateAsDate.getHours() !== nextMessageDateAsDate.getHours()) {
+      return true;
+    }
+    // If minutes not equal
+    if (actualMessageDateAsDate.getMinutes() !== nextMessageDateAsDate.getMinutes()) {
+      return true;
+    }
+    return false;
+  }
 }

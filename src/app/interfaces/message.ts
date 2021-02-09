@@ -5,5 +5,5 @@ export interface Message {
     text?: string;
     userId?: number;
     user?: User;
-    createdAt?: Date;
+    createdAt?: string | Date;
 }
