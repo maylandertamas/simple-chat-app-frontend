@@ -55,6 +55,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+@media (max-height: 992px) {
+  .center-container  {
+    max-height: 80%;
+  }
+}
+
 .no-padding-horizontal {
   padding-left: 0 !important;
   padding-right: 0 !important;
