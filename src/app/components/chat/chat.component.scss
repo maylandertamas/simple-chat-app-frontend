@@ -89,20 +89,6 @@ textarea.mat-input-element {
   margin-right: 0.2em;
 }
 
-.chat-message-from-others + .chat-message-from-me {
-  border-bottom-right-radius: 5px;
-}
-
-.chat-message-from-me + .chat-message-from-me {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.chat-message-from-me:last-of-type {
-  border-bottom-right-radius: 10px;
-}
-
-
 /* OTHER */
 .negative-margin-top-small {
   margin-top: -0.5em;

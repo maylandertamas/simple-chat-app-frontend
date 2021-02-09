@@ -31,7 +31,7 @@ export class MessageService implements OnDestroy {
   /**
    * Get message history
    */
-  public getMessageHistory(limit: number = 100, offset: number = null, useCache: boolean = false) : Observable<Message[]> {
+  public getMessageHistory(limit: number = 100, useCache: boolean = false) : Observable<Message[]> {
     // return messages from cache if possible
     if (useCache && this.messageHistory && this.messageHistory.length > 0) {
       return new Observable<Message[]>(observer => {
@@ -41,7 +41,6 @@ export class MessageService implements OnDestroy {
 
     // Add url parameters
     var url = 'api/messages?limit=' + limit;
-    url = offset ? url + '&offset=' + offset : url;
 
     // request messages from server
     return this.http.get(url).pipe(

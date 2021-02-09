@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, NgZone, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, NgZone, HostListener, AfterViewInit } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Message } from '../../interfaces/message';
 import { ActivatedRoute } from '@angular/router';
@@ -9,12 +9,22 @@ import { User } from 'src/app/interfaces/user';
 import { map, take } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import {trigger, style, animate, transition, keyframes} from '@angular/animations';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition('void => *', [
+        animate(300, keyframes([
+          style({transform: 'translateY(100%)', opacity: 0}),
+          style({transform: 'translateY(0)', opacity: 1})
+        ]))
+      ])
+    ])
+  ]
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
@@ -124,7 +134,6 @@ export class ChatComponent implements OnInit, OnDestroy {
    */
   public sendMessage() {
     if (this.isStringEmpty(this.newMessage.value) || this.newMessage.errors) { return null; }
-    this.isLoading = true;
     // Get logged in user
     if (!this.currentUser) {
       this.loginService.getLoggedInUser()

@@ -23,6 +23,7 @@
                 </li>
                 <!-- Message text -->
                 <li
+                @fadeIn
                 class="chat-list-item"
                 [ngClass]="{'chat-message-from-me': message.user.id === currentUser.id, 
                             'chat-message-from-others': message.user.id !== currentUser.id }">
