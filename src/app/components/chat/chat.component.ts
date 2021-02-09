@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, NgZone, HostListener } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Message } from '../../interfaces/message';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +9,7 @@ import { User } from 'src/app/interfaces/user';
 import { map, take } from 'rxjs/operators';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +29,14 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScrollViewport: CdkVirtualScrollViewport;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    if (this.newMessage.value && !this.isStringEmpty(this.newMessage.value)) {
+      return confirm('Are you sure you want to leave the chat?');
+    }
+    return true;
+  }
 
   constructor(private activeRoute: ActivatedRoute,
               private loginService: LoginService,
