@@ -1,4 +1,8 @@
-# SnFrontendApp
+# Simple Chat App
+
+A simple chat application.
+
+This is a frontend project for [Simple Chat App backend project](https://github.com/maylandertamas/simple-chat-app-backend)!
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.1.
 
