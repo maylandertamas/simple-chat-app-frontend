@@ -1,0 +1,58 @@
+<div class="container">
+    <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+    <div class="center-container">
+        <!-- HEADER -->
+        <span class="h3 primary-color viewport-container-header-text float-left">Simple Chat Room</span>
+        <app-logout class="float-right negative-margin-top-small"></app-logout>
+        <!-- SCROLL BOX  -->
+        <cdk-virtual-scroll-viewport itemSize="scollItemSize" class="virtual-scroll-viewport container-border">
+            <ul class="chat-list">
+                <ng-container  *cdkVirtualFor="let message of messageHistory; let i = index">
+                <!-- Date label -->
+                <li class="chat-message-label chat-date-label"
+                    *ngIf="isDateLabelRequired(message.createdAt, messageHistory[i-1]?.createdAt)"
+                    >
+                        {{message?.createdAt | date:'dd/MM/y HH:mm'}}
+                </li>
+                <!-- Message sender label -->
+                <li class="chat-message-label" 
+                    *ngIf="message?.user.id !== messageHistory[i-1]?.user.id"
+                    [ngClass]="{'chat-label-from-me': message.user.id === currentUser.id, 'chat-label-from-others': message.user.id !== currentUser.id }"
+                    >
+                        <b>{{message?.user?.username}}</b>
+                </li>
+                <!-- Message text -->
+                <li
+                @fadeIn
+                class="chat-list-item"
+                [ngClass]="{'chat-message-from-me': message.user.id === currentUser.id, 
+                            'chat-message-from-others': message.user.id !== currentUser.id }">
+                {{message.text}}
+                </li>
+                </ng-container>
+            </ul>
+        </cdk-virtual-scroll-viewport>
+        <!-- ERROR -->
+        <div *ngIf="error && isError " class="alert alert-danger mt-2" role="alert">
+            {{ error?.message ? error.message : 'An unknown error occured' }}
+        </div>
+        <!-- CHAT INPUT -->
+        <form (ngSubmit)="sendMessage()" (keydown)="enterSubmit($event)">
+            <mat-form-field class="float-left chat-form-field" [floatLabel]="'never'">
+            <mat-label>Leave a chat message as <b><i>{{currentUser.username}}</i></b></mat-label>
+            <textarea
+            matInput
+            [formControl]="newMessage"
+            name="chat-message"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="3"></textarea>
+            <button [disabled]="isStringEmpty(newMessage.value)" type="submit" mat-icon-button matSuffix color="primary">
+                <mat-icon>send</mat-icon>
+            </button>
+            <mat-error *ngIf="newMessage.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </form>
+    </div>
+</div>
