@@ -13,11 +13,20 @@ export class LogoutGuard implements CanDeactivate<ChatComponent> {
   constructor(
     private loginService: LoginService ) {}
 
+  /**
+   * Check deactivation request for ChatComponent
+   * Let user only deactivate component with logout
+   * @param component 
+   * @param currentRoute 
+   * @param currentState 
+   * @param nextState 
+   */
   canDeactivate(
     component: ChatComponent,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean> {
+    // Check if user is logged in
     return this.loginService.isUserLoggedIn()
       .pipe(map((res:boolean) => {
         return !res;
