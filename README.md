@@ -6,6 +6,8 @@ This is a frontend project for [Simple Chat App backend project](https://github.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.1.
 
+Note: Project only optimized for Chromium for now.
+
 ## Setup
 
 1. Install [npm](https://www.npmjs.com/get-npm)
