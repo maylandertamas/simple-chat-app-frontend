@@ -6,6 +6,15 @@ This is a frontend project for [Simple Chat App backend project](https://github.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.1.
 
+## Setup
+
+1. Install [npm](https://www.npmjs.com/get-npm)
+2. Open powershell and install angular/cli with: `npm install -g @angular/cli`
+3. Open project's root folder in powershell and run: `npm install`
+4. Run the project with `ng serve` or `npm start`
+
+More information about setup angular projects [here](https://angular.io/guide/setup-local)
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
