@@ -15,6 +15,10 @@ Note: Project only optimized for Chromium for now.
 3. Open project's root folder in powershell and run: `npm install`
 4. Run the project with `ng serve` or `npm start`
 
+## Setup with Docker
+1. Download Docker Desktop
+2. Use the following command in the project root to build and run: `docker-compose up --build`
+
 More information about setup angular projects [here](https://angular.io/guide/setup-local)
 
 ## Development server
