@@ -13,9 +13,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
     // Get url from environment
-    const urlFromEnvironment = environment?.apiUrl ? environment.apiUrl : 'http://localhost:5001'
+    const urlFromEnvironment = environment?.apiUrl ? environment.apiUrl : 'http://localhost:4000'
     // Set new base url
-    const apiUrl = req.clone({ url: urlFromEnvironment + `/${req.url}` }); 
+    const apiUrl = req.clone({ url: urlFromEnvironment + `/${req.url}` });
     return next.handle(apiUrl);
   }
 }

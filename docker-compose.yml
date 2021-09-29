@@ -1,0 +1,11 @@
+version: '3'
+services:
+  simple-chat-app-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - .:/app
+    ports:
+      - '4200:4200'

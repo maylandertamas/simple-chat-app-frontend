@@ -1,0 +1,11 @@
+version: '3'
+services:
+  angular:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+# define a standard network (also for backend) to operate known network
+networks:
+  default:
+    external:
+      name: simple-chat-app-backend_default
