@@ -3,6 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import { Subscription } from 'rxjs';
 import { Message } from 'src/app/interfaces/message';
 import { ResetService } from '../reset/reset.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class ChatService implements OnDestroy {
    */
   public startConnection = () => {
     this.hubConnection = new signalR.HubConnectionBuilder()
-                            .withUrl('https://localhost:5001/chat')
+                            .withUrl(environment.apiUrl +'/chat')
                             .build();
     this.hubConnection
       .start()

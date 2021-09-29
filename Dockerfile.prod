@@ -1,0 +1,64 @@
+# inspired by https://mherman.org/blog/dockerizing-an-angular-app/ [20.01.2020]
+# specifiy a base image
+FROM node:12-alpine as build
+
+# installing packages to make npm able to pull git repositories & more useful packages
+RUN apk add --update \
+  python \
+  python-dev \
+  py-pip \
+  build-base \
+  git \
+  openssh-client \
+&& pip install virtualenv \
+&& rm -rf /var/cache/apk/*
+
+# install chrome for protractor tests
+# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+# RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+# RUN apt-get update && apt-get install -yq google-chrome-stable
+
+# define working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+# ENV PATH /app/node_modules/.bin:$PATH
+
+# install angular client globally
+RUN npm install -g @angular/cli
+
+# to reduce unnecessary rebuilds copy package.json first (npm instal depends only on it)
+COPY ./package.json .
+# install some dependencies
+RUN npm install
+
+# copy source files (including package.json again)
+COPY . .
+
+# run tests
+# RUN ng test --watch=false
+# RUN ng e2e --port 4202
+
+# generate build
+RUN ng build --prod --output-path=dist --base-href=/your-tool-link/
+
+
+### STAGE 2: Run ###
+# base image
+FROM nginx:alpine
+
+# copy artifact build from the 'build environment'
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# extend the default server configuration
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
+
+# expose port 80 (only for better readability)
+EXPOSE 80
+
+# no CMD needed because by default nginx is starting up
+
+# to build it run
+# docker build .
+# by default nginx is running on port 80
+# docker run -p 8080:80 <image id>
