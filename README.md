@@ -8,16 +8,18 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Note: Project only optimized for Chromium for now.
 
+
+## Setup with Docker
+1. Download Docker Desktop
+2. Use the following command in the project root to build and run: `docker-compose up --build`
+
+
 ## Setup
 
 1. Install [npm](https://www.npmjs.com/get-npm)
 2. Open powershell and install angular/cli with: `npm install -g @angular/cli`
 3. Open project's root folder in powershell and run: `npm install`
 4. Run the project with `ng serve` or `npm start`
-
-## Setup with Docker
-1. Download Docker Desktop
-2. Use the following command in the project root to build and run: `docker-compose up --build`
 
 More information about setup angular projects [here](https://angular.io/guide/setup-local)
 
